@@ -35,7 +35,7 @@ logger = get_logger(__name__)
 @register("squad_paragraph_ranker")
 class SquadParagraphRanker(Component):
 
-    def __init__(self, ranker_config=None, top_n=10, type='paragraph', **kwargs):
+    def __init__(self, ranker_config=None, top_n=10, data_type='paragraph', active=True, **kwargs):
         """
 
         Args:
@@ -46,7 +46,8 @@ class SquadParagraphRanker(Component):
         self.ranker_config = expand_path(Path(ranker_config))
         self.ranker = build_model_from_config(json.load(self.ranker_config.open()))
         self.top_n = top_n
-        self.type = type
+        self.type = data_type
+        self.active = active
 
     def __call__(self, query_context_id: List[Tuple[str, List[str], List[Any]]]):
 
@@ -76,7 +77,8 @@ class SquadParagraphRanker(Component):
             text_score_id = list(zip(texts, scores, ids))
             text_score_id = sorted(text_score_id, key=itemgetter(1), reverse=True)
 
-            text_score_id = text_score_id[:self.top_n]
+            if self.active:
+                text_score_id = text_score_id[:self.top_n]
             batch_docs = [text for text, score, doc_id in text_score_id]
             batch_scores = [score for text, score, doc_id in text_score_id]
             batch_ids = [doc_id for text, score, doc_id in text_score_id]
