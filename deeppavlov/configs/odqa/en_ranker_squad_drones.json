@@ -35,7 +35,7 @@
       },
       {
         "name": "squad_paragraph_ranker",
-        "top_n": 10,
+        "top_n": 20,
         "active": false,
         "ranker_config": "../deeppavlov/configs/squad/squad_selqa_noans.json",
         "data_type": "sentences",
