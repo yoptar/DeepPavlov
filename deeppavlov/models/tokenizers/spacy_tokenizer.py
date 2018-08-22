@@ -69,7 +69,7 @@ class StreamSpacyTokenizer(Component):
             stopwords = set(nltk_stopwords.words('english'))
 
         self.stopwords = stopwords or []
-        self.model = spacy.load('en', disable=disable)
+        self.model = spacy.load('en_core_web_sm', disable=disable)
         self.model.add_pipe(self.model.create_pipe('sentencizer'))
         self.tokenizer = English().Defaults.create_tokenizer(self.model)
         self.batch_size = batch_size

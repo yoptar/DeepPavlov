@@ -7,6 +7,7 @@ import tensorflow as tf
 
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
+from deeppavlov.core.commands.utils import expand_path
 
 
 @register('use_sentence_ranker')
@@ -17,10 +18,10 @@ class USESentenceRanker(Component):
         :param return_vectors: return unranged USE vectors instead of sentences
         :param active: when is not active, return all sentences
         """
-        self.embed = hub.Module("https://tfhub.dev/google/universal-sentence-encoder/2")
+        self.embed = hub.Module(str(expand_path("general_electrics/hub")))
         self.session = tf.Session(config=tf.ConfigProto(
             gpu_options=tf.GPUOptions(
-                per_process_gpu_memory_fraction=0.2,
+                per_process_gpu_memory_fraction=0.4,
                 allow_growth=False
             )))
         self.session.run([tf.global_variables_initializer(), tf.tables_initializer()])

@@ -50,6 +50,10 @@ class EnsembleRanker(Component):
                 for prediction in instance:
                     prediction[SCORE_IDX] = float(prediction[SCORE_IDX] / norm)
 
+        tfidf = [[list(el) for el in instance] for instance in tfidf]
+        rnet = [[list(el) for el in instance] for instance in rnet]
+        tfhub = [[list(el) for el in instance] for instance in tfhub]
+
         # Normalize scores from all tfidf and rnet:
         normalize_scores(tfidf)
         normalize_scores(rnet)
