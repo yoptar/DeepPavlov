@@ -1,17 +1,17 @@
 Cython==0.27.1
+spacy
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.0.0/en_core_web_sm-2.0.0.tar.gz#en_core_web_sm
 lxml==4.1.1
 tqdm==4.19.5
 requests==2.18.4
-tensorflow-gpu==1.7
+tensorflow-gpu==1.8
 tensorflow-hub
 overrides==1.9
 kenlm==0.0.0
 h5py==2.7.1
 keras==2.1.2
-gensim==2.3.0
 pandas==0.21.1
 fuzzywuzzy==0.16.0
-git+https://github.com/facebookresearch/fastText.git@3872afadb3a9f30de7c7792ff2ff1bda64242097
 nltk==3.2.5
 scikit-learn==0.19.0
 spacy==2.0.5
@@ -25,3 +25,5 @@ pymorphy2==0.8
 pymorphy2-dicts-ru
 lightgbm
 sortedcontainers==2.0.2
+en_core_web_sm
+
