@@ -59,10 +59,6 @@ class EnsembleRanker(Component):
                 for pred in instance:
                     pred[SCORE_IDX] = float(pred[SCORE_IDX] / norm)
 
-        tfidf = [[list(el) for el in instance] for instance in tfidf]
-        rnet = [[list(el) for el in instance] for instance in rnet]
-        tfhub = [[list(el) for el in instance] for instance in tfhub]
-
         # Normalize scores from all tfidf and rnet:
         if tfidf is not None:
             normalize_scores(tfidf)

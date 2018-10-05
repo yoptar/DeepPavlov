@@ -54,6 +54,10 @@ class TFHUBParagraphOptRanker(Component):
             ids = indices[:, ::-1]
         dot_values = np.take(dots, indices)
 
+        # for chainer's sake:
+        dot_values = dot_values.tolist()
+        ids = ids.tolist()
+
         return dot_values, ids
 
 
