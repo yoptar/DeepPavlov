@@ -82,12 +82,14 @@
   "stream_spacy_tokenizer": "deeppavlov.models.tokenizers.spacy_tokenizer:StreamSpacyTokenizer",
   "tag_output_prettifier": "deeppavlov.models.morpho_tagger.common:TagOutputPrettifier",
   "tfidf_ranker": "deeppavlov.models.ranking.tfidf_ranker:TfidfRanker",
+  "tfhub_paragraph_opt_ranker": "deeppavlov.skills.odqa.tfhub_paragraph_opt_ranker:TFHUBParagraphOptRanker",
   "tokens_matcher": "deeppavlov.models.classifiers.tokens_matcher.tokens_matcher:TokensMatcher",
   "top1_elector": "deeppavlov.models.spelling_correction.electors.top1_elector:TopOneElector",
   "typos_custom_reader": "deeppavlov.dataset_readers.typos_reader:TyposCustom",
   "typos_iterator": "deeppavlov.dataset_iterators.typos_iterator:TyposDatasetIterator",
   "typos_kartaslov_reader": "deeppavlov.dataset_readers.typos_reader:TyposKartaslov",
   "typos_wikipedia_reader": "deeppavlov.dataset_readers.typos_reader:TyposWikipedia",
+  "use_encoder": "deeppavlov.skills.odqa.encoders.use_encoder:USEEncoder",
   "wiki_sqlite_vocab": "deeppavlov.vocabs.wiki_sqlite:WikiSQLiteVocab",
   "wikitionary_100K_vocab": "deeppavlov.vocabs.typos:Wiki100KDictionary"
 }
