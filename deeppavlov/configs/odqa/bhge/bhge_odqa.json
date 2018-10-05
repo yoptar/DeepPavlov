@@ -1,0 +1,62 @@
+{
+  "chainer": {
+    "in": [
+      "question_raw"
+    ],
+    "out": [
+      "best_answer"
+    ],
+    "pipe": [
+      {
+        "config_path": "../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_optimized_2.json",
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "rank_text_score_id"
+        ]
+      },
+      {
+        "name": "text_extractor",
+        "in": [
+          "rank_text_score_id"
+        ],
+        "out": [
+          "context_raw",
+          "context_scores"
+        ]
+      },
+      {
+        "name": "string_multiplier",
+        "in": ["question_raw", "context_raw"],
+        "out":["questions"]
+      },
+      {
+        "name": "logit_ranker",
+        "squad_model": {"config_path": "../deeppavlov/configs/squad/multi_squad_noans.json"},
+        "top_n": 3,
+        "in": [
+          "context_raw",
+          "questions"
+        ],
+        "out": [
+          "best_answer"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "requirements": [
+      "../dp_requirements/tf-gpu.txt",
+      "../dp_requirements/spacy.txt",
+      "../dp_requirements/en_core_web_sm.txt"
+    ],
+    "labels": {
+      "server_utils": "ODQA"
+    },
+    "download": [
+      "http://files.deeppavlov.ai/datasets/wikipedia/enwiki.tar.gz",
+      "http://files.deeppavlov.ai/deeppavlov_data/en_odqa.tar.gz"
+    ]
+  }
+}
