@@ -40,44 +40,95 @@
         }
       },
       {
+        "name": "tfidf_ranker",
+        "top_n": 20,
+        "active": true,
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_ids",
+          "doc_scores"
+        ],
+        "fit_on_batch": [
+          "questions_raw"
+        ],
+        "vectorizer": {
+          "name": "hashing_tfidf_vectorizer",
+          "fit_on_batch": [
+            "questions_raw"
+          ],
+          "save_path": "general_electrics/en_ge_book_tfidf.npz",
+          "load_path": "general_electrics/en_ge_book_tfidf.npz",
+          "tokenizer": {
+            "name": "stream_spacy_tokenizer",
+            "lemmas": true,
+            "ngram_range": [
+              1,
+              2
+            ],
+            "stopwords": "sklearn"
+          }
+        }
+      },
+      {
         "name": "wiki_sqlite_vocab",
         "id": "my_wiki_sqlite_vocab",
         "in": [
-          "doc_ids_500"
+          "doc_ids"
         ],
         "out": [
-          "context_raw_all",
-          "doc_ids_all"
+          "context_raw",
+          "doc_ids"
         ],
         "shuffle": false,
         "join_docs": false,
         "load_path": "general_electrics/ge_book.db"
       },
       {
+        "ref": "my_wiki_sqlite_vocab",
+        "in": [
+          "doc_ids_500"
+        ],
+        "out": [
+          "context_raw_500",
+          "doc_ids_500"
+        ]
+      },
+      {
         "name": "query_paragraph_tuplifier",
         "in": [
           "question_raw",
-          "context_raw_all",
-          "doc_ids_all"
+          "context_raw_500",
+          "doc_ids_500"
         ],
         "out": [
           "question_paragraph_tuples"
         ]
       },
       {
-        "name": "tfhub_paragraph_ranker",
+        "name": "tfhub_paragraph_opt_ranker",
+        "load_path": "general_electrics/use_vectors.npy",
         "top_n": 20,
         "active": true,
-        "ranker": {
-          "name": "use_sentence_ranker",
-          "active": false
+        "encoder": {
+          "name": "use_encoder"
         },
         "in": [
-          "question_paragraph_tuples"
+          "question_raw"
+        ],
+        "out": [
+          "doc_scores_use",
+          "doc_ids_use"
+        ]
+      },
+      {
+        "ref": "my_wiki_sqlite_vocab",
+        "in": [
+          "doc_ids_use"
         ],
         "out": [
           "docs_use",
-          "doc_scores_use",
           "doc_ids_use"
         ]
       },
@@ -122,7 +173,7 @@
       {
         "ref": "my_rank_doc_score_tuplifier",
         "in": [
-          "context_raw_all",
+          "context_raw",
           "doc_scores_500",
           "doc_ids_500"
         ],
@@ -151,7 +202,7 @@
   },
   "metadata": {
     "download": [
-     "http://lnsigo.mipt.ru/export/deeppavlov_data/general_electrics.tar.gz",
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/general_electrics.tar.gz",
       "http://lnsigo.mipt.ru/export/deeppavlov_data/squad_selqa_model_noans_tf1.8.tar.gz",
       {
         "url": "http://lnsigo.mipt.ru/export/embeddings/wiki-news-300d-1M.vec",

@@ -1,7 +1,7 @@
 import numpy as np
 
 from deeppavlov.dataset_iterators.sqlite_iterator import SQLiteDataIterator
-from deeppavlov.skills.odqa.basic_neural_context_encoder import BasicNeuralContextEncoder
+from deeppavlov.skills.odqa.encoders.basic_neural_context_encoder import BasicNeuralContextEncoder
 
 iterator = SQLiteDataIterator(load_path='/media/olga/Data/projects/DeepPavlov/download/odqa/enwiki.db',
                               shuffle=False)

@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 
 
 @register("tfhub_paragraph_ranker")
-class TFHUBParagraphRanker(Component):
+class TFHUBParagraphRuntimeRanker(Component):
 
     def __init__(self, ranker: Union[USESentenceRanker, ELMoRanker], tokenizer: Optional[StreamSpacyTokenizer] = None,
                  top_n=10, active: bool = True, sentencize_fn=sent_tokenize, **kwargs):
@@ -51,7 +51,7 @@ class TFHUBParagraphRanker(Component):
     def __call__(self, query_context_id: List[Tuple[str, List[str], List[Any]]]):
 
         """
-        todo: optimize query embedding counting (now counts at every iteration)
+        todo: optimize context embedding counting (now counts at every iteration)
         """
 
         all_docs = []
