@@ -133,21 +133,6 @@
         ]
       },
       {
-        "name": "squad_paragraph_ranker",
-        "active": true,
-        "top_n": 20,
-        "ranker_config": "../deeppavlov/configs/squad/squad_selqa_noans.json",
-        "type": "paragraph",
-        "in": [
-          "question_paragraph_tuples"
-        ],
-        "out": [
-          "docs_squad",
-          "doc_scores_squad",
-          "doc_ids_squad"
-        ]
-      },
-      {
         "name": "rank_doc_score_tuplifier",
         "id": "my_rank_doc_score_tuplifier",
         "in": [
@@ -157,17 +142,6 @@
         ],
         "out": [
           "rank_text_score_id_use"
-        ]
-      },
-      {
-        "ref": "my_rank_doc_score_tuplifier",
-        "in": [
-          "docs_squad",
-          "doc_scores_squad",
-          "doc_ids_squad"
-        ],
-        "out": [
-          "rank_text_score_id_rnet"
         ]
       },
       {
@@ -186,8 +160,7 @@
         "top_n": 5,
         "in": [
           "rank_text_score_id_tfidf",
-          "rank_text_score_id_use",
-          "rank_text_score_id_rnet"
+          "rank_text_score_id_use"
         ],
         "out": [
           "rank_text_score_id_ensemble"
