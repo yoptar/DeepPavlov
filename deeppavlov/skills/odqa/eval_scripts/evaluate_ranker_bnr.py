@@ -11,7 +11,7 @@ import numpy as np
 # from deeppavlov.core.commands.infer import build_model_from_config
 from deeppavlov.core.common.file import read_json, save_json
 from deeppavlov.models.tokenizers.spacy_tokenizer import StreamSpacyTokenizer
-from deeppavlov.skills.odqa.basic_neural_query_encoder import BasicNeuralQueryEncoder
+from deeppavlov.skills.odqa.encoders.basic_neural_query_encoder import BasicNeuralQueryEncoder
 from deeppavlov.vocabs.wiki_sqlite import WikiSQLiteVocab
 
 logger = logging.getLogger()

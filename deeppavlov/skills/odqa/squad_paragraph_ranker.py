@@ -145,7 +145,8 @@ class SquadParagraphRanker(Component):
             text_score_id = list(zip(contexts, query_scores, ids))
             text_score_id = sorted(text_score_id, key=itemgetter(1), reverse=True)
 
-            text_score_id = text_score_id[:self.top_n]
+            if self.active:
+                text_score_id = text_score_id[:self.top_n]
             batch_docs = [text for text, score, doc_id in text_score_id]
             batch_scores = [score for text, score, doc_id in text_score_id]
             batch_ids = [doc_id for text, score, doc_id in text_score_id]
