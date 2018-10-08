@@ -86,7 +86,7 @@
   "string_multiplier": "deeppavlov.models.preprocessors.odqa_preprocessors:StringMultiplier",
   "tag_output_prettifier": "deeppavlov.models.morpho_tagger.common:TagOutputPrettifier",
   "text_extractor": "deeppavlov.models.preprocessors.odqa_preprocessors:TextExtractor",
-  "tfidf_ranker": "deeppavlov.models.ranking.tfidf_ranker:TfidfRanker",
+  "tfidf_ranker": "deeppavlov.skills.odqa.tfidf_ranker:TfidfRanker",
   "tfhub_paragraph_opt_ranker": "deeppavlov.skills.odqa.tfhub_paragraph_opt_ranker:TFHUBParagraphOptRanker",
   "tokens_matcher": "deeppavlov.models.classifiers.tokens_matcher.tokens_matcher:TokensMatcher",
   "top1_elector": "deeppavlov.models.spelling_correction.electors.top1_elector:TopOneElector",

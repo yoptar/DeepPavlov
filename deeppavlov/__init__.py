@@ -17,6 +17,7 @@ from .package_meta import __version__, __author__
 
 # check version
 import sys
+
 assert sys.hexversion >= 0x3060000, 'Does not work in python3.5 or lower'
 
 import deeppavlov.core.models.keras_model
@@ -41,7 +42,7 @@ import deeppavlov.dataset_readers.odqa_reader
 import deeppavlov.dataset_iterators.squad_iterator
 import deeppavlov.dataset_iterators.sqlite_iterator
 # import deeppavlov.dataset_iterators.morphotagger_iterator
-#import deeppavlov.models.classifiers.intents.intent_model
+# import deeppavlov.models.classifiers.intents.intent_model
 import deeppavlov.models.supplementary.sentence_splitter
 import deeppavlov.models.supplementary.query_paragraph_tuplifier
 import deeppavlov.models.supplementary.rank_doc_score_tuplifier
