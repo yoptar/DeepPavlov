@@ -4,7 +4,7 @@
       "question_raw"
     ],
     "out": [
-      "best_answer"
+      "answer_score_text"
     ],
     "pipe": [
       {
@@ -28,12 +28,19 @@
       },
       {
         "name": "string_multiplier",
-        "in": ["question_raw", "context_raw"],
-        "out":["questions"]
+        "in": [
+          "question_raw",
+          "context_raw"
+        ],
+        "out": [
+          "questions"
+        ]
       },
       {
         "name": "logit_ranker",
-        "squad_model": {"config_path": "../deeppavlov/configs/squad/multi_squad_noans.json"},
+        "squad_model": {
+          "config_path": "../deeppavlov/configs/squad/multi_squad_noans.json"
+        },
         "top_n": 3,
         "in": [
           "context_raw",
@@ -42,21 +49,26 @@
         "out": [
           "best_answer"
         ]
+      },
+      {
+        "name": "context_adder",
+        "in": ["best_answer", "context_raw"],
+        "out": ["answer_score_text"]
       }
     ]
   },
   "metadata": {
-    "requirements": [
-      "../dp_requirements/tf-gpu.txt",
-      "../dp_requirements/spacy.txt",
-      "../dp_requirements/en_core_web_sm.txt"
-    ],
-    "labels": {
-      "server_utils": "ODQA"
-    },
     "download": [
-      "http://files.deeppavlov.ai/datasets/wikipedia/enwiki.tar.gz",
-      "http://files.deeppavlov.ai/deeppavlov_data/en_odqa.tar.gz"
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/general_electrics.tar.gz",
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/multi_squad_model_noans.tar.gz",
+      {
+        "url": "http://lnsigo.mipt.ru/export/embeddings/wiki-news-300d-1M.vec",
+        "subdir": "embeddings"
+      },
+      {
+        "url": "http://lnsigo.mipt.ru/export/embeddings/wiki-news-300d-1M-char.vec",
+        "subdir": "embeddings"
+      }
     ]
   }
 }

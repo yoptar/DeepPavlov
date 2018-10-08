@@ -8,6 +8,7 @@
   "char_splitter": "deeppavlov.models.preprocessors.char_splitter:CharSplitter",
   "char_vocab": "deeppavlov.core.data.simple_vocab:CharacterVocab",
   "conll2003_reader": "deeppavlov.dataset_readers.conll2003_reader:Conll2003DatasetReader",
+  "context_adder": "deeppavlov.models.preprocessors.odqa_preprocessors:ContextAdder",
   "data_fitting_iterator": "deeppavlov.core.data.data_fitting_iterator:DataFittingIterator",
   "data_learning_iterator": "deeppavlov.core.data.data_learning_iterator:DataLearningIterator",
   "default_tracker": "deeppavlov.models.go_bot.tracker:DefaultTracker",

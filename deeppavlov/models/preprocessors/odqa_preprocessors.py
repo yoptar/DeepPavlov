@@ -138,3 +138,22 @@ class TextExtractor(Component):
             all_scores.append(scores)
 
         return all_texts, all_scores
+
+
+@register('context_adder')
+class ContextAdder(Component):
+
+    def __init__(self, **kwargs):
+        pass
+
+    def __call__(self, answers: List[List[Tuple[str, Any]]], contexts: List[List[str]]):
+
+        batch_answer_score_id = []
+
+        for answer, context in zip(answers, contexts):
+            res = []
+            for i in range(len(answer)):
+                res.append((*answer[i], context[i]))
+            batch_answer_score_id.append(res)
+
+        return batch_answer_score_id
