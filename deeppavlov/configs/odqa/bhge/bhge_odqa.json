@@ -47,12 +47,13 @@
           "questions"
         ],
         "out": [
-          "best_answer"
+          "best_answer",
+          "context_indices"
         ]
       },
       {
         "name": "context_adder",
-        "in": ["best_answer", "context_raw"],
+        "in": ["best_answer", "context_raw", "context_indices"],
         "out": ["answer_score_text"]
       }
     ]

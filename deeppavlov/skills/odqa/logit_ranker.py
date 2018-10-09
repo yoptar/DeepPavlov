@@ -40,8 +40,8 @@ class LogitRanker(Component):
         self.batch_size = batch_size
         self.top_n = top_n
 
-    def __call__(self, contexts_batch: List[List[str]], questions_batch: List[List[str]])\
-            -> List[List[Tuple[str, Any]]]:
+    def __call__(self, contexts_batch: List[List[str]], questions_batch: List[List[str]]) ->\
+            Tuple[List[List[Tuple[str, Any]]], List[List[int]]]:
         """
         Sort obtained results from squad reader by logits and get the answer with a maximum logit.
         Args:
@@ -52,6 +52,7 @@ class LogitRanker(Component):
         """
 
         batch_best_answers = []
+        batch_context_indices = []
         for contexts, questions in zip(contexts_batch, questions_batch):
             results = []
             for i in range(0, len(contexts), self.batch_size):
@@ -59,8 +60,11 @@ class LogitRanker(Component):
                 q_batch = questions[i: i + self.batch_size]
                 batch_predict = zip(*self.squad_model(c_batch, q_batch))
                 results += batch_predict
-            best_answers = sorted(results, key=itemgetter(2), reverse=True)[:self.top_n]
+            sorted_items = sorted(enumerate(results), key=lambda x: x[1][2], reverse=True)[:self.top_n]
+            best_answers = list(map(itemgetter(1), sorted_items))
+            context_indices = list(map(itemgetter(0), sorted_items))
             best_answers = [ba[::2] for ba in best_answers]
             best_answers = [('no answer', ba[1]) if ba[0] == '' else ba for ba in best_answers]
             batch_best_answers.append(best_answers)
-        return batch_best_answers
+            batch_context_indices.append(context_indices)
+        return batch_best_answers, batch_context_indices

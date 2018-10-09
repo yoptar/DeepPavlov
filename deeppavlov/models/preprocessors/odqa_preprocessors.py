@@ -1,4 +1,3 @@
-
 # Copyright 2017 Neural Networks and Deep Learning lab, MIPT
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -114,7 +113,7 @@ class StringMultiplier(Component):
         res = []
 
         for s, r in zip(batch_s, ref):
-            res.append([s]*len(r))
+            res.append([s] * len(r))
 
         return res
 
@@ -146,14 +145,16 @@ class ContextAdder(Component):
     def __init__(self, **kwargs):
         pass
 
-    def __call__(self, answers: List[List[Tuple[str, Any]]], contexts: List[List[str]]):
+    def __call__(self, answers: List[List[Tuple[str, Any]]], contexts: List[List[str]],
+                 context_indices: List[List[int]]):
 
         batch_answer_score_id = []
 
-        for answer, context in zip(answers, contexts):
+        for answer, context, index in zip(answers, contexts, context_indices):
             res = []
+            sorted_context = [context[j] for j in index]
             for i in range(len(answer)):
-                res.append((*answer[i], context[i]))
+                res.append((*answer[i], sorted_context[i]))
             batch_answer_score_id.append(res)
 
         return batch_answer_score_id
