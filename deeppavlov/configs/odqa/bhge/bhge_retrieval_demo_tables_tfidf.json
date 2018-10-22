@@ -1,0 +1,74 @@
+{
+  "dataset_reader": {
+    "class": "deeppavlov.dataset_readers.odqa_reader:ODQADataReader",
+    "data_path": "general_electrics/bhge_tables.db",
+    "save_path": "general_electrics/bhge_tables.db",
+    "dataset_format": "sqlite"
+  },
+  "dataset_iterator": {
+    "name": "sqlite_iterator",
+    "data_dir": "odqa",
+    "shuffle": false,
+    "load_path": "general_electrics/bhge_tables.db"
+  },
+  "chainer": {
+    "in": [
+      "question_raw"
+    ],
+    "out": [
+      "doc_ids_as_int"
+    ],
+    "pipe": [
+      {
+        "name": "hashing_tfidf_vectorizer",
+        "id": "vectorizer",
+        "fit_on_batch": [
+          "x"
+        ],
+        "save_path": "general_electrics/bhge_tables_tfidf.npz",
+        "load_path": "general_electrics/bhge_tables_tfidf.npz",
+        "tokenizer": {
+          "name": "stream_spacy_tokenizer",
+          "lemmas": true,
+          "ngram_range": [
+            1,
+            2
+          ],
+          "stopwords": "sklearn",
+          "sentences": true,
+          "alphas_only": true
+        }
+      },
+      {
+        "name": "tfidf_ranker",
+        "top_n": 3,
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_ids",
+          "doc_scores"
+        ],
+        "vectorizer": "#vectorizer"
+      },
+      {
+        "name": "table_names_converter",
+        "in": [
+          "doc_ids"
+        ],
+        "out": [
+          "doc_ids_as_int"
+        ]
+      }
+    ]
+  },
+  "train": {
+    "validate_best": false,
+    "test_best": false,
+    "batch_size": 10
+  },
+  "metadata": {
+    "download": [
+    ]
+  }
+}
