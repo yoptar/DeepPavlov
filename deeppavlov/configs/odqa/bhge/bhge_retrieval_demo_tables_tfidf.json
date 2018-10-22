@@ -7,7 +7,7 @@
   },
   "dataset_iterator": {
     "name": "sqlite_iterator",
-    "data_dir": "odqa",
+    "data_dir": "general_electrics",
     "shuffle": false,
     "load_path": "general_electrics/bhge_tables.db"
   },
