@@ -120,3 +120,5 @@ download/
 .log
 eval_logs/
 plots/
+.ipynb_checkpoints/
+.lock
