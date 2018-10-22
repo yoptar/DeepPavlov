@@ -1,0 +1,144 @@
+{
+  "chainer": {
+    "in": [
+      "question_raw"
+    ],
+    "out": [
+      "doc_ids_as_int"
+    ],
+    "pipe": [
+      {
+        "name": "tfidf_ranker",
+        "top_n": 46,
+        "active": true,
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_ids",
+          "doc_scores"
+        ],
+        "fit_on_batch": [
+          "questions_raw"
+        ],
+        "vectorizer": {
+          "name": "hashing_tfidf_vectorizer",
+          "fit_on_batch": [
+            "questions_raw"
+          ],
+          "save_path": "general_electrics/bhge_lists_tfidf.npz",
+          "load_path": "general_electrics/bhge_lists_tfidf.npz",
+          "tokenizer": {
+            "name": "stream_spacy_tokenizer",
+            "lemmas": true,
+            "ngram_range": [
+              1,
+              2
+            ],
+            "sentences": true,
+            "alphas_only": false
+          }
+        }
+      },
+      {
+        "name": "wiki_sqlite_vocab",
+        "id": "my_wiki_sqlite_vocab",
+        "in": [
+          "doc_ids"
+        ],
+        "out": [
+          "context_raw",
+          "doc_ids"
+        ],
+        "shuffle": false,
+        "join_docs": false,
+        "load_path": "general_electrics/bhge_lists.db"
+      },
+      {
+        "name": "tfhub_paragraph_opt_ranker",
+        "load_path": "general_electrics/lists_use_vectors.npy",
+        "top_n": 46,
+        "active": true,
+        "encoder": {
+          "name": "use_encoder"
+        },
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_scores_use",
+          "doc_ids_use"
+        ]
+      },
+      {
+        "name": "table_indices_converter",
+        "in": ["doc_ids_use"],
+        "out": ["doc_ids_use_titles"]
+      },
+      {
+        "ref": "my_wiki_sqlite_vocab",
+        "in": [
+          "doc_ids_use_titles"
+        ],
+        "out": [
+          "docs_use",
+          "doc_ids_use_titles"
+        ]
+      },
+      {
+        "name": "rank_doc_score_tuplifier",
+        "id": "my_rank_doc_score_tuplifier",
+        "in": [
+          "docs_use",
+          "doc_scores_use",
+          "doc_ids_use_titles"
+        ],
+        "out": [
+          "rank_text_score_id_use"
+        ]
+      },
+      {
+        "ref": "my_rank_doc_score_tuplifier",
+        "in": [
+          "context_raw",
+          "doc_scores",
+          "doc_ids"
+        ],
+        "out": [
+          "rank_text_score_id_tfidf"
+        ]
+      },
+      {
+        "name": "ensemble_ranker",
+        "top_n": 3,
+        "in": [
+          "rank_text_score_id_tfidf",
+          "rank_text_score_id_use"
+        ],
+        "out": [
+          "rank_text_score_id_ensemble"
+        ]
+      },
+      {
+        "name": "table_names_converter",
+        "converted_type": "ensemble",
+        "in": [
+          "rank_text_score_id_ensemble"
+        ],
+        "out": [
+          "doc_ids_as_int"
+        ]
+      }
+    ]
+  },
+  "train": {
+    "validate_best": false,
+    "test_best": false,
+    "batch_size": 10000
+  },
+  "metadata": {
+    "download": [
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/general_electrics.tar.gz"
+    ]
+  }
+}

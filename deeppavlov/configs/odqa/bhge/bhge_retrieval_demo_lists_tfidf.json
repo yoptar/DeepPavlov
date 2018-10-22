@@ -1,0 +1,75 @@
+{
+  "dataset_reader": {
+    "class": "deeppavlov.dataset_readers.odqa_reader:ODQADataReader",
+    "data_path": "/media/olga/Data/datasets/bhge/lists/lists_as_txt",
+    "save_path": "general_electrics/bhge_lists.db",
+    "dataset_format": "sqlite"
+  },
+  "dataset_iterator": {
+    "name": "sqlite_iterator",
+    "data_dir": "general_electrics",
+    "shuffle": false,
+    "load_path": "general_electrics/bhge_lists.db"
+  },
+  "chainer": {
+    "in": [
+      "question_raw"
+    ],
+    "out": [
+      "doc_ids_as_int"
+    ],
+    "pipe": [
+      {
+        "name": "tfidf_ranker",
+        "top_n": 46,
+        "active": true,
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_ids",
+          "doc_scores"
+        ],
+        "fit_on_batch": [
+          "questions_raw"
+        ],
+        "vectorizer": {
+          "name": "hashing_tfidf_vectorizer",
+          "fit_on_batch": [
+            "questions_raw"
+          ],
+          "save_path": "general_electrics/bhge_lists_tfidf.npz",
+          "load_path": "general_electrics/bhge_lists_tfidf.npz",
+          "tokenizer": {
+            "name": "stream_spacy_tokenizer",
+            "lemmas": true,
+            "ngram_range": [
+              1,
+              2
+            ],
+            "sentences": true,
+            "alphas_only": false
+          }
+        }
+      },
+      {
+        "name": "table_names_converter",
+        "in": [
+          "doc_ids"
+        ],
+        "out": [
+          "doc_ids_as_int"
+        ]
+      }
+    ]
+  },
+  "train": {
+    "validate_best": false,
+    "test_best": false,
+    "batch_size": 10
+  },
+  "metadata": {
+    "download": [
+    ]
+  }
+}
