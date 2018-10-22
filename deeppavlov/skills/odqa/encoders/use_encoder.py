@@ -1,4 +1,4 @@
-from typing import List, Tuple, Callable
+from typing import List, Optional, Callable
 
 import numpy as np
 import tensorflow_hub as hub
@@ -12,7 +12,7 @@ from deeppavlov.core.commands.utils import expand_path
 
 @register('use_encoder')
 class USEEncoder(Component):
-    def __init__(self, sentencize_fn: Callable = sent_tokenize, **kwargs):
+    def __init__(self, sentencize_fn: Optional[Callable] = sent_tokenize, **kwargs):
         """
         :param top_n: top n sentences to return
         :param return_vectors: return unranged USE vectors instead of sentences
@@ -32,7 +32,7 @@ class USEEncoder(Component):
 
     def __call__(self, contexts: List[str]):
         """
-        Rank sentences and return top n sentences.
+        Encode each context as a single vector.
         """
 
         all_vectors = []
@@ -41,7 +41,10 @@ class USEEncoder(Component):
         for context in contexts:
             # DEBUG
             # start_time = time.time()
-            sentences = self.sentencize_fn(context)
+            if self.sentencize_fn:
+                sentences = self.sentencize_fn(context)
+            else:
+                sentences = [context]
             s_vectors = self.session.run([self.c_emb], feed_dict={self.c_ph: sentences})[0]
             # if len(s_vectors[0]) >= self.sentence_pad_size:
             #     m = s_vectors[0][:self.sentence_pad_size]
