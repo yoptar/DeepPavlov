@@ -23,6 +23,8 @@ from multiprocessing import Pool
 
 from tqdm import tqdm
 
+from deeppavlov.core.commands.utils import expand_path
+
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +36,7 @@ class ODQADataReader:
         logger.info('Reading files...')
         if kwargs['dataset_format'] == 'sqlite':
             return
-        _build_db(kwargs['save_path'], kwargs['dataset_format'], data_path)
+        _build_db(expand_path(kwargs['save_path']), kwargs['dataset_format'], data_path)
 
 
 def iter_files(path: Union[Path, str]) -> Generator[Path, Any, Any]:
