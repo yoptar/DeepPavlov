@@ -4,7 +4,7 @@ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.0.0
 lxml==4.1.1
 tqdm==4.19.5
 requests==2.18.4
-tensorflow-gpu==1.8
+tensorflow==1.8
 tensorflow-hub
 overrides==1.9
 kenlm==0.0.0
@@ -14,7 +14,6 @@ pandas==0.21.1
 fuzzywuzzy==0.16.0
 nltk==3.2.5
 scikit-learn==0.19.0
-spacy==2.0.5
 pytelegrambotapi==3.5.2
 python-Levenshtein==0.12.0
 flask==0.12.2
@@ -25,5 +24,4 @@ pymorphy2==0.8
 pymorphy2-dicts-ru
 lightgbm
 sortedcontainers==2.0.2
-en_core_web_sm
 
