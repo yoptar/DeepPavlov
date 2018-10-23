@@ -10,9 +10,6 @@ import time
 import unicodedata
 import logging
 import csv
-import re
-import string
-import matplotlib.pylab as plt
 
 from deeppavlov.core.common.file import read_json
 from deeppavlov.core.commands.infer import build_model_from_config
@@ -30,6 +27,8 @@ parser.add_argument("-config_path", help="path to a JSON ranker config", type=st
                     default='../../../../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_ensemble.json')
 parser.add_argument("-dataset_path", help="path to a QA TSV dataset", type=str,
                     default='/media/olga/Data/datasets/bhge/tables/questions_v2_answers.tsv')
+parser.add_argument("-output_path", help="path to a QA TSV dataset", type=str,
+                    default='/media/olga/Data/datasets/bhge/tables/tables_predictions.csv')
 
 
 def normalize(s: str):
@@ -74,6 +73,7 @@ def main():
     config = read_json(args.config_path)
     ranker = build_model_from_config(config)  # chainer
     dataset = read_tsv(args.dataset_path)
+    output_path = args.output_path
     # dataset = dataset[:10]
 
     qa_dataset_size = len(dataset)
@@ -85,24 +85,31 @@ def main():
     try:
         mapping = {}
 
-        ranker_answers = ranker([i['question'] for i in dataset])
+        questions = [i['question'] for i in dataset]
+        ranker_answers = ranker(questions)
         returned_db_size = len(ranker_answers[0])
         logger.info("Returned DB size: {}".format(returned_db_size))
 
-        for n in range(1, returned_db_size + 1):
-            correct_answers = 0
-            for qa, ranker_answer in zip(dataset, ranker_answers):
-                true_id = int(qa['table_id'])
-                pred_ids = ranker_answer[:n]
-                correct_answers += int(true_id in pred_ids)
-                # correct_answer = qa['answer']
-                # texts = [answer[TEXT_IDX] for answer in ranker_answer[:n]]
-                # correct_answers += instance_score([correct_answer], texts)
-            print(correct_answers)
-            total_score_on_top_i = correct_answers / qa_dataset_size
-            logger.info(
-                'Recall for top {}: {}'.format(n, total_score_on_top_i))
-            mapping[n] = total_score_on_top_i
+        with open(output_path, 'w') as csvfile:
+            writer = csv.writer(csvfile, delimiter=';')
+            for n in range(1, returned_db_size + 1):
+                correct_answers = 0
+                i = 0
+                for qa, ranker_answer in zip(dataset, ranker_answers):
+                    true_id = int(qa['table_id'])
+                    pred_ids = ranker_answer[:n]
+                    correct_answers += int(true_id in pred_ids)
+                    # correct_answer = qa['answer']
+                    # texts = [answer[TEXT_IDX] for answer in ranker_answer[:n]]
+                    # correct_answers += instance_score([correct_answer], texts)
+                    if n == 1:
+                        writer.writerow([true_id, questions[i], *pred_ids])
+                    i += 1
+                print(correct_answers)
+                total_score_on_top_i = correct_answers / qa_dataset_size
+                logger.info(
+                    'Recall for top {}: {}'.format(n, total_score_on_top_i))
+                mapping[n] = total_score_on_top_i
 
         logger.info("Completed successfully in {} seconds.".format(time.time() - start_time))
         logger.info("Quality mapping: {}".format(mapping))
