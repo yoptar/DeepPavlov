@@ -49,14 +49,14 @@ class TFHUBParagraphOptRanker(Component):
         dots = np.matmul(q_vectors, self.context_vectors.transpose())
         indices = dots.argsort()
         if self.active:
-            ids = indices[:, -self.top_n:][::-1]
+            ids = [arr[-self.top_n:][::-1] for arr in indices]
         else:
-            ids = indices[:, ::-1]
-        dot_values = np.take(dots, indices)
+            ids = [arr[::-1] for arr in indices]
+        dot_values = np.take(dots, ids)
 
         # for chainer's sake:
         dot_values = dot_values.tolist()
-        ids = ids.tolist()
+        # ids = ids.tolist()
 
         return dot_values, ids
 
