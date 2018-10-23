@@ -66,11 +66,24 @@ class TableNamesConverter(Component):
 @register("table_indices_converter")
 class TableIndicesConverter(Component):
 
-    def __init__(self, suffix='.txt', *args, **kwargs):
+    def __init__(self, suffix='.txt', lists=True, *args, **kwargs):
         self.suffix = suffix
+        if lists:
+            self.title_map = {'0.txt': 0, '1.txt': 1, '10.txt': 2, '11.txt': 3, '12.txt': 4, '13.txt': 5, '14.txt': 6,
+                              '15.txt': 7, '16.txt': 8, '17.txt': 9, '18.txt': 10, '19.txt': 11, '2.txt': 12,
+                              '20.txt': 13, '21.txt': 14, '22.txt': 15, '23.txt': 16, '24.txt': 17, '25.txt': 18,
+                              '26.txt': 19, '27.txt': 20, '28.txt': 21, '29.txt': 22, '3.txt': 23, '30.txt': 24,
+                              '31.txt': 25, '32.txt': 26, '33.txt': 27, '34.txt': 28, '35.txt': 29, '36.txt': 30,
+                              '37.txt': 31, '38.txt': 32, '39.txt': 33, '4.txt': 34, '40.txt': 35, '41.txt': 36,
+                              '42.txt': 37, '43.txt': 38, '44.txt': 39, '45.txt': 40, '5.txt': 41, '6.txt': 42,
+                              '7.txt': 43, '8.txt': 44, '9.txt': 45}
+        else:
+            self.title_map = {'0.txt': 0, '1.txt': 1, '10.txt': 2, '11.txt': 3, '12.txt': 4, '13.txt': 5, '14.txt': 6,
+                              '15.txt': 7, '16.txt': 8, '17.txt': 9, '2.txt': 10, '3.txt': 11, '4.txt': 12, '5.txt': 13,
+                              '6.txt': 14, '7.txt': 15, '8.txt': 16, '9.txt': 17}
 
     def __call__(self, batch_data: List[List[int]], *args, **kwargs):
         res = []
         for instance_data in batch_data:
-            res.append([f'{i}{self.suffix}' for i in instance_data])
+            res.append([k for i in instance_data for k in self.title_map.keys() if self.title_map[k] == i])
         return res

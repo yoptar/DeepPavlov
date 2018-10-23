@@ -73,6 +73,7 @@
       },
       {
         "name": "table_indices_converter",
+        "lists": false,
         "in": ["doc_ids_use"],
         "out": ["doc_ids_use_titles"]
       },
