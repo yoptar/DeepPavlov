@@ -1,0 +1,89 @@
+{
+  "chainer": {
+    "in": [
+      "question_raw"
+    ],
+    "out": [
+      "answer_score_text"
+    ],
+    "pipe": [
+      {
+        "config_path": "../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_tfidf.json",
+        "in": [
+          "question_raw"
+        ],
+        "out": [
+          "doc_ids_as_int"
+        ]
+      },
+      {
+        "name": "json_vocab",
+        "load_path": "general_electrics/corrected_tables_v2.json",
+        "in": [
+          "doc_ids_as_int"
+        ],
+        "out": [
+          "tables_raw"
+        ]
+      },
+      {
+        "name": "squad_table_preprocessor",
+        "in": ["tables_raw"],
+        "out": ["formatted_tables", "cells"]
+      },
+      {
+        "name": "string_multiplier",
+        "in": ["question_raw", "formatted_tables"],
+        "out": ["questions_raw"]
+
+      },
+      {
+        "name": "tables_logit_ranker",
+        "sort_noans": true,
+        "squad_model": {
+          "config_path": "../deeppavlov/configs/squad/multi_squad_noans.json"
+        },
+        "top_n": 3,
+        "in": [
+          "formatted_tables",
+          "questions_raw",
+          "cells",
+          "doc_ids_as_int"
+        ],
+        "out": [
+          "best_answer"
+        ]
+      },
+      {
+        "name": "json_vocab",
+        "load_path": "general_electrics/corrected_tables_v2.json",
+        "return_all_content": true,
+        "in": [
+          "doc_ids_as_int"
+        ],
+        "out": [
+          "all_tables_raw"
+        ]
+      },
+       {
+        "name": "table_context_adder",
+        "in": ["best_answer", "all_tables_raw"],
+        "out": ["answer_score_text"]
+      }
+    ]
+  },
+  "metadata": {
+    "download": [
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/general_electrics.tar.gz",
+      "http://lnsigo.mipt.ru/export/deeppavlov_data/multi_squad_model_noans.tar.gz",
+      {
+        "url": "http://lnsigo.mipt.ru/export/embeddings/wiki-news-300d-1M.vec",
+        "subdir": "embeddings"
+      },
+      {
+        "url": "http://lnsigo.mipt.ru/export/embeddings/wiki-news-300d-1M-char.vec",
+        "subdir": "embeddings"
+      }
+    ]
+  }
+}
