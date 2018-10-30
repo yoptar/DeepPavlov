@@ -19,29 +19,10 @@
       "doc_ids_as_int"
     ],
     "pipe": [
-      {
-        "name": "hashing_tfidf_vectorizer",
-        "id": "vectorizer",
-        "fit_on_batch": [
-          "x"
-        ],
-        "save_path": "general_electrics/bhge_tables_tfidf.npz",
-        "load_path": "general_electrics/bhge_tables_tfidf.npz",
-        "tokenizer": {
-          "name": "stream_spacy_tokenizer",
-          "lemmas": true,
-          "ngram_range": [
-            1,
-            2
-          ],
-          "stopwords": "sklearn",
-          "sentences": true,
-          "alphas_only": true
-        }
-      },
-      {
+       {
         "name": "tfidf_ranker",
-        "top_n": 3,
+        "top_n": 18,
+        "active": true,
         "in": [
           "question_raw"
         ],
@@ -49,7 +30,27 @@
           "doc_ids",
           "doc_scores"
         ],
-        "vectorizer": "#vectorizer"
+        "fit_on_batch": [
+          "questions_raw"
+        ],
+        "vectorizer": {
+          "name": "hashing_tfidf_vectorizer",
+          "fit_on_batch": [
+            "questions_raw"
+          ],
+          "save_path": "general_electrics/bhge_tables_tfidf.npz",
+          "load_path": "general_electrics/bhge_tables_tfidf.npz",
+          "tokenizer": {
+            "name": "stream_spacy_tokenizer",
+            "lemmas": true,
+            "ngram_range": [
+              1,
+              2
+            ],
+            "sentences": true,
+            "alphas_only": true
+          }
+        }
       },
       {
         "name": "table_names_converter",
