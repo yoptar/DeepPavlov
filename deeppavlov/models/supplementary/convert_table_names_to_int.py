@@ -85,5 +85,11 @@ class TableIndicesConverter(Component):
     def __call__(self, batch_data: List[List[int]], *args, **kwargs):
         res = []
         for instance_data in batch_data:
-            res.append([k for i in instance_data for k in self.title_map.keys() if self.title_map[k] == i])
+            # res.append([k for i in instance_data for k in self.title_map.keys() if self.title_map[k] == i])
+            _res = []
+            for i in instance_data:
+                if i in self.title_map.keys():
+                    _res.append(self.title_map[i])
+            res.append(_res)
+
         return res
