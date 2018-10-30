@@ -33,7 +33,9 @@ from deeppavlov.core.common.file import read_json
 
 # config_path = '/home/gureenkova/tmp/pycharm_project_196/deeppavlov/configs/odqa/en_ranker_ensemble_drones.json'
 # config_path = '/media/olga/Data/projects/iPavlov/DeepPavlov/deeppavlov/configs/odqa/en_ranker_tfidf_drones.json'
-config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_odqa.json'
+# config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_odqa.json'
+
+config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_odqa_tables.json'
 
 # interact_model(config_path)
 #

@@ -80,6 +80,7 @@ import deeppavlov.skills.odqa.ensemble_ranker_via_api
 import deeppavlov.skills.odqa.squad_paragraph_ranker
 import deeppavlov.vocabs.typos
 import deeppavlov.vocabs.wiki_sqlite
+import deeppavlov.vocabs.json_vocab
 # import deeppavlov.dataset_readers.insurance_reader
 # import deeppavlov.dataset_iterators.ranking_iterator
 # import deeppavlov.models.ner.network
