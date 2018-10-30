@@ -109,9 +109,9 @@ class TablesLogitRanker(Component):
         for instance_contexts, instance_cells, instance_table_ids in zip(contexts_batch, cells_batch,
                                                                          batch_table_indices):
             instance_best_answers = []
-            for contexts, cells, questions, table_id in zip(instance_contexts, instance_cells, questions_batch,
+            for contexts, cells, question, table_id in zip(instance_contexts, instance_cells, questions_batch,
                                                             instance_table_ids):
-                questions = [questions[0]] * len(contexts)
+                questions = [question] * len(contexts)
                 results = []
                 for i in range(0, len(contexts), self.batch_size):
                     c_batch = contexts[i: i + self.batch_size]

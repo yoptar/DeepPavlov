@@ -32,12 +32,6 @@
         "out": ["formatted_tables", "cells"]
       },
       {
-        "name": "string_multiplier",
-        "in": ["question_raw", "formatted_tables"],
-        "out": ["questions_raw"]
-
-      },
-      {
         "name": "tables_logit_ranker",
         "sort_noans": true,
         "squad_model": {
@@ -46,7 +40,7 @@
         "top_n": 3,
         "in": [
           "formatted_tables",
-          "questions_raw",
+          "question_raw",
           "cells",
           "doc_ids_as_int"
         ],
