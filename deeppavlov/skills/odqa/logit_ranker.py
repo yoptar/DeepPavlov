@@ -106,11 +106,11 @@ class TablesLogitRanker(Component):
         """
 
         batch_best_answers = []
-        # batch_context_indices = []
-        for instance_contexts, instance_cells in zip(contexts_batch, cells_batch):
+        for instance_contexts, instance_cells, instance_table_ids in zip(contexts_batch, cells_batch,
+                                                                         batch_table_indices):
             instance_best_answers = []
-            # instance_context_indices = []
-            for contexts, cells, questions in zip(instance_contexts, instance_cells, questions_batch):
+            for contexts, cells, questions, table_id in zip(instance_contexts, instance_cells, questions_batch,
+                                                            instance_table_ids):
                 questions = [questions[0]] * len(contexts)
                 results = []
                 for i in range(0, len(contexts), self.batch_size):
@@ -119,24 +119,10 @@ class TablesLogitRanker(Component):
                     batch_predict = zip(*self.squad_model(c_batch, q_batch))
                     results += batch_predict
                 if self.sort_noans:
-                    results = sorted(enumerate(results), key=lambda x: x[1][0] == '')
-                sorted_items = sorted(results, key=lambda x: x[1][2], reverse=True)
-                best_answers = list(map(itemgetter(1), sorted_items))
-                context_indices = list(map(itemgetter(0), sorted_items))
-                # best_answers = [ba[::2] for ba in best_answers]
-                best_answers = [(cells[idx], ba[2]) for idx, ba in zip(context_indices, best_answers)]
-                best_answers = [('no answer', ba[1]) if ba[0] == '' else ba for ba in best_answers]
-                instance_best_answers.append(best_answers)
-                # instance_context_indices.append(context_indices)
-            batch_best_answers.append(instance_best_answers)
-            # batch_context_indices.append(instance_context_indices)
-
-        # add table indices
-        for iba, ti in zip(batch_best_answers, batch_table_indices):
-            for k, iiba in enumerate(iba):
-                for j in range(len(iiba)):
-                    iiba[j] = (iiba[j][0], iiba[j][1], ti[k])
-        batch_best_answers = [sorted(chain.from_iterable(iba), key=itemgetter(1), reverse=True)[:self.top_n] for iba in
-                              batch_best_answers]
+                    results = sorted(enumerate(results), key=lambda x: x[1][0] != '', reverse=True)
+                best_answers = [(cells[ba[0]], ba[1][2], table_id) for ba in results]
+                instance_best_answers += best_answers
+            best = sorted(instance_best_answers, key=itemgetter(1), reverse=True)[:self.top_n]
+            batch_best_answers.append(best)
 
         return batch_best_answers
