@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import List, Callable, Union, Any, Tuple
+from typing import List, Callable, Union, Any, Tuple, Dict
 from itertools import chain
 from operator import itemgetter
 
@@ -158,3 +158,30 @@ class ContextAdder(Component):
             batch_answer_score_id.append(res)
 
         return batch_answer_score_id
+
+
+@register('table_context_adder')
+class TableContextAdder(Component):
+
+    def __init__(self, **kwargs):
+        pass
+
+    def __call__(self, batch_answers: List[List[Tuple[str, Any]]], contexts: List[List[Dict]]):
+
+        batch_answer_score_text = []
+        context = contexts[0]
+        for instance_answer in batch_answers:
+            batch_answer_score_text.append([(ia[0], ia[1], context[ia[2]]) for ia in instance_answer])
+
+        return batch_answer_score_text
+
+
+# @register('bhge_formatter')
+# class BHGEFormatter(Component):
+#
+#     def __init__(self, **kwargs):
+#         pass
+#
+#     def __call__(self, tables, answers):
+#
+#         return answers

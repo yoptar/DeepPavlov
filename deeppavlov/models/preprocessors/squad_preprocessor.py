@@ -242,7 +242,7 @@ class SquadVocabEmbedder(Estimator):
                         self.embedding_dict[word] = vec
 
             self.token2idx_dict = {token: idx for idx,
-                                             token in enumerate(self.embedding_dict.keys(), 2)}
+                                                  token in enumerate(self.embedding_dict.keys(), 2)}
             self.token2idx_dict[self.NULL] = 0
             self.token2idx_dict[self.OOV] = 1
             self.embedding_dict[self.NULL] = [0. for _ in range(self.emb_dim)]
@@ -384,3 +384,46 @@ class SquadDummyFeatures(Component):
 
     def __call__(self, batch):
         return [None] * len(batch)
+
+
+@register('squad_table_preprocessor')
+class SquadTablePreprocessor(Component):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __call__(self, batch):
+        """
+
+        Args:
+            batch: batch of tables
+
+        Returns:
+
+        """
+        batch_text = []
+        batch_cells = []
+
+        for instance in batch:
+            instance_text = []
+            instance_cells = []
+            for table in instance:
+                text = []
+                cells = []
+                c = table['columns']
+                main_columns_names = [c[0].strip()] + ['', 'CASE', 'Equipment Item', 'PROBLEM']
+                main_columns_ids = [i for i in range(len(c)) if c[i].strip() in main_columns_names]
+                for row in table['rows']:
+                    for i, el in enumerate(row):
+                        s = ''
+                        if i not in main_columns_ids:
+                            for mid in main_columns_ids:
+                                s += '{} {} '.format(c[mid].strip(), row[mid].strip())
+                            s += '{} {}'.format(c[i].strip(), el.strip())
+                            text.append(table['title'].strip() + ' ' + s.strip())
+                            cells.append(el.strip())
+                instance_text.append(text)
+                instance_cells.append(cells)
+            batch_text.append(instance_text)
+            batch_cells.append(instance_cells)
+
+        return batch_text, batch_cells
