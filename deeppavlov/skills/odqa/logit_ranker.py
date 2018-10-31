@@ -94,7 +94,7 @@ class TablesLogitRanker(Component):
         self.top_n = top_n
         self.sort_noans = sort_noans
 
-    def __call__(self, contexts_batch: List[List[str]], questions_batch: List[List[str]], cells_batch,
+    def __call__(self, contexts_batch: List[List[str]], questions_batch: List[str], cells_batch,
                  batch_table_indices):
         """
         Sort obtained results from squad reader by logits and get the answer with a maximum logit.
@@ -105,24 +105,35 @@ class TablesLogitRanker(Component):
             a batch of best answers
         """
 
+        # Get SQuAD answers
+
         batch_best_answers = []
-        for instance_contexts, instance_cells, instance_table_ids in zip(contexts_batch, cells_batch,
-                                                                         batch_table_indices):
-            instance_best_answers = []
-            for contexts, cells, question, table_id in zip(instance_contexts, instance_cells, questions_batch,
-                                                            instance_table_ids):
+        for instance_contexts, instance_cells, instance_table_ids, question in zip(contexts_batch, cells_batch,
+                                                                                   batch_table_indices,
+                                                                                   questions_batch):
+            results = []
+            for contexts, cells, table_id in zip(instance_contexts, instance_cells, instance_table_ids):
+                # if any(item == '' for item in cells):
+                #     print('emptu cell!')
                 questions = [question] * len(contexts)
-                results = []
+                # print(question)
+                # print(table_id)
                 for i in range(0, len(contexts), self.batch_size):
                     c_batch = contexts[i: i + self.batch_size]
                     q_batch = questions[i: i + self.batch_size]
-                    batch_predict = zip(*self.squad_model(c_batch, q_batch))
-                    results += batch_predict
-                if self.sort_noans:
-                    results = sorted(enumerate(results), key=lambda x: x[1][0] != '', reverse=True)
-                best_answers = [(cells[ba[0]], ba[1][2], table_id) for ba in results]
-                instance_best_answers += best_answers
-            best = sorted(instance_best_answers, key=itemgetter(1), reverse=True)[:self.top_n]
-            batch_best_answers.append(best)
+                    squad_batch_predict = zip(*self.squad_model(c_batch, q_batch))
+                    # results.append((list(squad_batch_predict), table_id, question))
+                    results.append(
+                        [(el[0], el[1], el[2], table_id, cells[i]) for i, el in enumerate(squad_batch_predict)])
+            batch_best_answers.append(list(chain.from_iterable(results)))
+
+        # Sorting SQuAD answers
+
+        for k, instance_best_answers in enumerate(batch_best_answers):
+            sorted_instance_best_answers = list(filter(lambda x: x[4] != '', instance_best_answers))
+            sorted_instance_best_answers = sorted(sorted_instance_best_answers, key=itemgetter(2), reverse=True)[
+                                           :self.top_n]
+            sorted_instance_best_answers = [(el[4], el[2], el[3]) for el in sorted_instance_best_answers]
+            batch_best_answers[k] = sorted_instance_best_answers
 
         return batch_best_answers
