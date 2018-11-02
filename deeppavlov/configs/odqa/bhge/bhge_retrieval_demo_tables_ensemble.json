@@ -9,7 +9,7 @@
     "pipe": [
       {
         "name": "tfidf_ranker",
-        "top_n": 17,
+        "top_n": 18,
         "active": true,
         "in": [
           "question_raw"
