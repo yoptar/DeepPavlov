@@ -35,11 +35,14 @@ from deeppavlov.core.common.file import read_json
 # config_path = '/media/olga/Data/projects/iPavlov/DeepPavlov/deeppavlov/configs/odqa/en_ranker_tfidf_drones.json'
 # config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_odqa.json'
 
-config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_odqa_tables.json'
+config_path = '/media/olga/Data/projects/DeepPavlov/deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_tfidf.json'
 
 # interact_model(config_path)
 #
 model = build_model_from_config(read_json(config_path))
-data=["How can I get some?", "What is oil?"]
+# data=["How to do planned sidetrack off cement plug in AutoTrack systems?",
+#       "What is the total feedstock for Sulphur recovery for benchmark plant (in kmol/h)?",
+#       "What polyol do with productive rock?"]
+data=["energy balance for sulphur recovery train for real world plant"]
 res = model(data)
 print(res)

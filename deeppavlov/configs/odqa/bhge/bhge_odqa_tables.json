@@ -8,7 +8,7 @@
     ],
     "pipe": [
       {
-        "config_path": "../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_tfidf.json",
+        "config_path": "../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_tfidf_top_1.json",
         "in": [
           "question_raw"
         ],
