@@ -24,11 +24,11 @@ logger.addHandler(file)
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-config_path", help="path to a JSON ranker config", type=str,
-                    default='../../../../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_ensemble.json')
+                    default='../../../../deeppavlov/configs/odqa/bhge/bhge_retrieval_demo_tables_tfidf.json')
 parser.add_argument("-dataset_path", help="path to a QA TSV dataset", type=str,
-                    default='/media/olga/Data/datasets/bhge/tables/questions_v2_answers.tsv')
+                    default='/media/olga/Data/datasets/bhge/tables/questions_v3_answers.tsv')
 parser.add_argument("-output_path", help="path to a QA TSV dataset", type=str,
-                    default='/media/olga/Data/datasets/bhge/tables/tables_predictions.csv')
+                    default='/media/olga/Data/datasets/bhge/tables/tables_predictions_del.csv')
 
 
 def normalize(s: str):

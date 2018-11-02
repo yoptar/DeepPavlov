@@ -11,6 +11,8 @@ import unicodedata
 import logging
 import csv
 
+import numpy as np
+
 from deeppavlov.core.common.file import read_json
 from deeppavlov.core.commands.infer import build_model_from_config
 from deeppavlov.metrics.squad_metrics import squad_f1, exact_match
@@ -95,12 +97,29 @@ def main():
         y_true = [([i['answer']], ['-1']) for i in dataset]
         y_pred = [(a[0][0], a[0][1]) for a in odqa_answers]
 
+        recall_at = [1, 2, 3, 4, 5, 10]
+        EM, F1 = np.zeros(shape=(max(recall_at),), dtype=np.float32), np.zeros(shape=(max(recall_at),),
+                                                                               dtype=np.float32)
+
+        for k in recall_at:
+            for true_answer, top_answers in zip(y_true, odqa_answers):
+                em, f1 = 0, 0
+                for answer in top_answers[:k]:
+                    a = answer[0]
+                    em = max(em, exact_match([true_answer], [(a, 1)]))
+                    f1 = max(f1, squad_f1([true_answer], [(a, 1)]))
+                EM[k - 1] += em
+                F1[k - 1] += f1
+        EM = EM / len(questions)
+        F1 = F1 / len(questions)
+        for k in recall_at:
+            print(f'recall@{k}: em: {EM[k-1]:.2f} f1: {F1[k-1]:.2f}')
+
         f1_top_1 = squad_f1(y_true, y_pred)
         em_top_1 = exact_match(y_true, y_pred)
 
-        print(f1_top_1)
-        print(em_top_1)
-
+        print(f'f1_top_1: {f1_top_1}')
+        print(f'em_top_1: {em_top_1}')
 
         # for n in range(1, returned_top_n_size + 1):
         #     correct_answers = 0
