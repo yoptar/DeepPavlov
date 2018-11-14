@@ -56,7 +56,7 @@ class TFHUBParagraphOptRanker(Component):
 
         # for chainer's sake:
         dot_values = dot_values.tolist()
-        # ids = ids.tolist()
+        # ids = [a.tolist() for a in ids]
 
         return dot_values, ids
 

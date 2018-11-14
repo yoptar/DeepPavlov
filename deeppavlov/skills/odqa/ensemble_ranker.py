@@ -65,6 +65,10 @@ class EnsembleRanker(Component):
         if rnet is not None:
             normalize_scores(rnet)
 
+        # Optional
+        # if tfhub is not None:
+        #     normalize_scores(tfhub)
+
         # Count average scores from all rankers
         all_data = []
         for instances in zip(*rankers):
