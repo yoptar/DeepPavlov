@@ -1,10 +1,4 @@
 theme: jekyll-theme-leap-day
 google_analytics: UA-121416192-2
 include:
-  - _static
-  - _static/ipavlov_footer.png
-  - docs/_static
   - /docs/_static
-  - docs/_static
-  - /docs/_static/ipavlov_footer.png
-  - docs/_static/ipavlov_footer.png
