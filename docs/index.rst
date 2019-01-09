@@ -4,7 +4,6 @@ Welcome to DeepPavlov's documentation!
 .. toctree::
    :glob:
    :maxdepth: 1
-   :caption: Intro
 
    Hello bot! <intro/hello_bot>
    Installation <intro/installation>
@@ -30,6 +29,7 @@ Welcome to DeepPavlov's documentation!
    Slot filling <components/slot_filling>
    Spelling Correction <components/spelling_correction>
    TF-IDF Ranking <components/tfidf_ranking>
+   Popularity Ranking <components/popularity_ranking>
 
 
 .. toctree::
@@ -42,7 +42,7 @@ Welcome to DeepPavlov's documentation!
    Pattern Matching <skills/pattern_matching>
    Sequence-To-Sequence Dialogue Bot <skills/seq2seq_go_bot>
    Frequently Asked Questions Answering <skills/faq>
-   eCommerce Bot <skills/ecommerce_bot_skill>
+   eCommerce Bot <skills/ecommerce>
 
 
 .. toctree::
