@@ -1,4 +1,6 @@
 theme: jekyll-theme-leap-day
 google_analytics: UA-121416192-2
 include:
+  - _static
   - docs/_static
+  - /docs/_static
